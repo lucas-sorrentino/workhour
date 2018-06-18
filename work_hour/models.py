@@ -31,8 +31,8 @@ class RegistroDiario(models.Model):
 class Cliente(models.Model):
 
     nome = models.CharField(max_length=200)
-    cnpj = models.TextField()
-    telefone = models.TextField(max_length=13)
+    cnpj = models.CharField(max_length=20)
+    telefone = models.CharField(max_length=13)
     valor_plano = models.DecimalField(max_digits=8, decimal_places=2)
 
     class Meta:
