@@ -1,6 +1,7 @@
 from django.contrib import admin
 from import_export import resources
 from reversion.admin import VersionAdmin
+from admin_reports import Report, register
 
 from work_hour.ImportExportVersionModelAdmin import ImportExportVersionModelAdmin
 from work_hour.models import RegistroDiario, Cliente, Atividade, AtividadeDiaria, DiaDaSemana, Feriado
@@ -88,4 +89,12 @@ class FeriadoAdmin(ImportExportVersionModelAdmin):
     list_display = ("nome", "data", "fixo",)
     list_filter = ("nome", "data")
     search_fields = ("nome",)
+
+@register()
+class MyReport(Report):
+    def aggregate(self, **kwargs):
+        return [
+            dict([(k, v) for v, k in enumerate('abcdefgh')]),
+            dict([(k, v) for v, k in enumerate('abcdefgh')]),
+        ]
 

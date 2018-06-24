@@ -61,9 +61,9 @@ class AtividadeDiaria(models.Model):
     hora_inicio = models.TimeField()
     hora_fim = models.TimeField(blank=True, null=True)
     horas_alocadas_minutos = models.IntegerField(blank=True, null=True)
-    atividade = models.ForeignKey(Atividade, verbose_name='atividades', on_delete=models.PROTECT)
-    registro_diario = models.ForeignKey(RegistroDiario, verbose_name='atividades', on_delete=models.PROTECT)
-    cliente = models.ForeignKey(Cliente, verbose_name='atividades', on_delete=models.PROTECT)
+    atividade = models.ForeignKey(Atividade, verbose_name='atividade', on_delete=models.PROTECT)
+    registro_diario = models.ForeignKey(RegistroDiario, verbose_name='horario', on_delete=models.PROTECT)
+    cliente = models.ForeignKey(Cliente, verbose_name='cliente', on_delete=models.PROTECT)
 
 
     class Meta:

@@ -36,8 +36,8 @@ DATABASES = {
 # Application definition
 
 INSTALLED_APPS = [
-    'material',
-    'material.admin',
+    'bootstrap_admin',
+    'admin_reports',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'work_hour',
     'reversion',
-    'import_export'
+    'import_export',
 ]
 
 MIDDLEWARE = [
