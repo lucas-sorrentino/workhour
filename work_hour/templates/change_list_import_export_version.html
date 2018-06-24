@@ -1,5 +1,6 @@
 {% extends "admin/import_export/change_list.html" %}
 {% load i18n admin_urls %}
+{% load staticfiles%}
 
 {% block object-tools-items %}
     <li><a href="import/" class="import_link">{% trans "Import" %}</a></li>
@@ -8,4 +9,5 @@
         <li><a href="{% url opts|admin_urlname:'recoverlist' %}" class="recoverlink">{% blocktrans with cl.opts.verbose_name_plural|escape as name %}Recover deleted {{name}}{% endblocktrans %}</a></li>
     {% endif %}
     {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/changelists.css'%}">
 {% endblock %}

@@ -36,6 +36,7 @@ DATABASES = {
 # Application definition
 
 INSTALLED_APPS = [
+    'work_hour',
     'bootstrap_admin',
     'admin_reports',
     'django.contrib.admin',
@@ -44,7 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'work_hour',
     'reversion',
     'import_export',
 ]
