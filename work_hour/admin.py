@@ -46,7 +46,7 @@ class FeriadoResource(resources.ModelResource):
 @admin.register(RegistroDiario)
 class RegistroDiarioAdmin(ImportExportVersionModelAdmin):
     resource_class = RegistroDiarioResource
-    list_display = ("data", "horas_trabalhadas", "observacoes")
+    list_display = ("data", "horas_totais", "observacoes")
     # list_filter = ("")
     search_fields = ("data", "observacoes")
     exclude = ("horas_trabalhadas", "usuario")

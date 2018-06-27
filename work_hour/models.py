@@ -1,3 +1,5 @@
+from datetime import time, datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -26,6 +28,18 @@ class RegistroDiario(models.Model):
 
     def __str__(self):
         return '%s' % self.data
+
+
+    @property
+    def horas_totais(self):
+        hora = '-'
+        if self.saida_1 and self.entrada_1 and not self.entrada_2 and not self.saida_2:
+            time1 = time.strftime(self.saida_1, '%Y-%m-%d %H:%M:%S')
+            time2 = time.strftime(self.entrada_1, '%Y-%m-%d %H:%M:%S')
+
+            hora = datetime.strptime(time1, '%Y-%m-%d %H:%M:%S') - datetime.strptime(time2, '%Y-%m-%d %H:%M:%S')
+            # hora.strftime(format['%H:%M', t])
+        return hora
 
 
 class Cliente(models.Model):
