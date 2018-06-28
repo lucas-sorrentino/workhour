@@ -1,3 +1,4 @@
+from django.contrib.admin import ModelAdmin
 from import_export.admin import ImportMixin, ExportMixin
 from reversion.admin import VersionAdmin
 

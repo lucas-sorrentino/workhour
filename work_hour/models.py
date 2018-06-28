@@ -1,5 +1,6 @@
 from datetime import time, datetime
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -7,6 +8,7 @@ from django.db import models
 from django.db import models
 
 # Create your models here.
+
 
 class RegistroDiario(models.Model):
 
@@ -19,7 +21,7 @@ class RegistroDiario(models.Model):
     saida_3 = models.TimeField(null=True, blank=True)
     horas_trabalhadas = models.IntegerField(null=True, blank=True)
     observacoes = models.TextField(null=True, blank=True)
-    usuario = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = 'Horário Diário'
@@ -38,8 +40,35 @@ class RegistroDiario(models.Model):
             time2 = time.strftime(self.entrada_1, '%Y-%m-%d %H:%M:%S')
 
             hora = datetime.strptime(time1, '%Y-%m-%d %H:%M:%S') - datetime.strptime(time2, '%Y-%m-%d %H:%M:%S')
-            # hora.strftime(format['%H:%M', t])
+        elif self.saida_1 and self.entrada_1 and self.entrada_2 and self.saida_2 and not self.entrada_3:
+            time1 = time.strftime(self.saida_1, '%Y-%m-%d %H:%M:%S')
+            time2 = time.strftime(self.entrada_1, '%Y-%m-%d %H:%M:%S')
+            time3 = time.strftime(self.saida_2, '%Y-%m-%d %H:%M:%S')
+            time4 = time.strftime(self.entrada_2, '%Y-%m-%d %H:%M:%S')
+
+            hora = (datetime.strptime(time1, '%Y-%m-%d %H:%M:%S') - datetime.strptime(time2, '%Y-%m-%d %H:%M:%S')) + \
+                   (datetime.strptime(time3, '%Y-%m-%d %H:%M:%S') - datetime.strptime(time4, '%Y-%m-%d %H:%M:%S'))
+        elif self.saida_1 and self.entrada_1 and self.entrada_2 and self.saida_2 and self.entrada_3 and self.saida_3:
+            time1 = time.strftime(self.saida_1, '%Y-%m-%d %H:%M:%S')
+            time2 = time.strftime(self.entrada_1, '%Y-%m-%d %H:%M:%S')
+            time3 = time.strftime(self.saida_2, '%Y-%m-%d %H:%M:%S')
+            time4 = time.strftime(self.entrada_2, '%Y-%m-%d %H:%M:%S')
+            time5 = time.strftime(self.saida_3, '%Y-%m-%d %H:%M:%S')
+            time6 = time.strftime(self.entrada_3, '%Y-%m-%d %H:%M:%S')
+
+            hora = (datetime.strptime(time1, '%Y-%m-%d %H:%M:%S') - datetime.strptime(time2, '%Y-%m-%d %H:%M:%S')) + \
+                   (datetime.strptime(time3, '%Y-%m-%d %H:%M:%S') - datetime.strptime(time4, '%Y-%m-%d %H:%M:%S')) + \
+                   (datetime.strptime(time5, '%Y-%m-%d %H:%M:%S') - datetime.strptime(time6, '%Y-%m-%d %H:%M:%S'))
+
         return hora
+
+
+
+class RelatorioHorasTrabalhadas(RegistroDiario):
+    class Meta:
+        verbose_name = 'Relatório Horas'
+        verbose_name_plural = 'Relatórios Horas'
+        proxy = True
 
 
 class Cliente(models.Model):

@@ -18,7 +18,9 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 import admin_reports
 admin.site.site_header = 'WorkHour'
+admin.site.site_title = 'WorkHour'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^admin/', admin_reports.site.urls),
+    # url(r'^admin/', include(admin_reports.site.urls)),
 ]
