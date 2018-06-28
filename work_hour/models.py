@@ -35,7 +35,7 @@ class RegistroDiario(models.Model):
     @property
     def horas_totais(self):
         hora = '-'
-        if self.saida_1 and self.entrada_1 and not self.entrada_2 and not self.saida_2:
+        if self.saida_1 and self.entrada_1 and not self.entrada_2:
             time1 = time.strftime(self.saida_1, '%Y-%m-%d %H:%M:%S')
             time2 = time.strftime(self.entrada_1, '%Y-%m-%d %H:%M:%S')
 
@@ -127,6 +127,12 @@ class AtividadeDiaria(models.Model):
     @property
     def data(self):
         return '%s' % (self.registro_diario.data)
+
+class RelatorioAtividades(AtividadeDiaria):
+    class Meta:
+        verbose_name = 'Relatório Atividades'
+        verbose_name_plural = 'Relatórios Atividades'
+        proxy = True
 
 class DiaDaSemana(models.Model):
 

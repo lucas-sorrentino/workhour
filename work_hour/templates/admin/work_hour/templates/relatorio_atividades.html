@@ -11,7 +11,7 @@
       <tr>
         <th>
           <div class="text">
-            <a href="#">Usuário</a>
+            <a href="#">Atividade</a>
           </div>
         </th>
         <th>
@@ -24,18 +24,9 @@
     <tbody>
       {% for row in summary %}
       <tr class="{% cycle 'row1' 'row2' %}">
-        <td> {{ row.usuario }} </td>
+        <td> {{ row.atividade }} </td>
         <td> {{ row.horas_trabalhadas }} </td>
       {% endfor %}
-    </tr>
-          <tr style="font-weight:bold; border-top:2px solid #DDDDDD;">
-            <td> Total </td>
-            <td> {{ summary_total.total | default:0 }} </td>
-        </tr>
-    <tr style="font-weight:bold; border-top:2px solid #DDDDDD;">
-            <td> Saldo: </td>
-            <td> {{ saldo.saldo | default:0 }} </td>
-        </tr>
     </tbody>
 
   </table>

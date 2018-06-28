@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 from django.contrib import admin
 from django.contrib.admin import AdminSite, ModelAdmin
@@ -11,7 +11,7 @@ from admin_reports import Report, register
 
 from work_hour.ImportExportVersionModelAdmin import ImportExportVersionModelAdmin
 from work_hour.models import RegistroDiario, Cliente, Atividade, AtividadeDiaria, DiaDaSemana, Feriado, \
-    RelatorioHorasTrabalhadas
+    RelatorioHorasTrabalhadas, RelatorioAtividades
 
 
 class RegistroDiarioResource(resources.ModelResource):
@@ -181,6 +181,69 @@ class RelatorioHorasAdmin(ModelAdmin):
         response.context_data['summary_total'] = {
             'total': horas_totais
         }
+
+        horas_previstas = len(horarios) * timedelta(hours=8, minutes=0)
+
+        response.context_data['saldo'] = {'saldo': str(horas_totais - horas_previstas)}
+
+        return response
+
+
+@admin.register(RelatorioAtividades)
+class RelatorioHorasAdmin(ModelAdmin):
+    change_list_template = 'admin/work_hour/templates/relatorio_atividades.html'
+    # date_hierarchy = 'created'
+
+    def queryset(self, request):
+        qs = super(RelatorioAtividades, self).queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(usuario=request.user)
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(
+            request,
+            extra_context=extra_context,
+        )
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        lista = []
+
+        atividades = AtividadeDiaria.objects.all()
+        horas_totais = timedelta(hours=0, minutes=0)
+        for atividade in atividades:
+            dado = None
+            if len(lista) > 0:
+                dado = [{'index': lista.index(item), 'item': item} for item in lista if item["atividade"] == atividade.atividade]
+            if dado:
+                if not isinstance(atividade.registro_diario.horas_totais, str) and not isinstance(dado[0]['item']['horas_trabalhadas'], str):
+                    data = {
+                        'atividade': atividade.atividade.nome,
+                        'horas_trabalhadas': dado[0]['item']['horas_trabalhadas'] + atividade.registro_diario.horas_totais
+                    }
+                    lista.append(data)
+                    lista.pop(dado[0]['index'])
+            else:
+                data = {
+                    'atividade': atividade.atividade.nome,
+                    'horas_trabalhadas': atividade.registro_diario.horas_totais
+                }
+                lista.append(data)
+            if not isinstance(atividade.registro_diario.horas_totais, str):
+                horas_totais += atividade.registro_diario.horas_totais
+
+        response.context_data['summary'] = lista
+
+        response.context_data['summary_total'] = {
+            'total': horas_totais
+        }
+
+        # horas_previstas = len(horarios) * timedelta(hours=8, minutes=0)
+
+        # response.context_data['saldo'] = {'saldo': str(horas_totais - horas_previstas)}
 
         return response
 
