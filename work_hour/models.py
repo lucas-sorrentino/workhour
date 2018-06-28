@@ -128,6 +128,7 @@ class AtividadeDiaria(models.Model):
     def data(self):
         return '%s' % (self.registro_diario.data)
 
+
 class RelatorioAtividades(AtividadeDiaria):
     class Meta:
         verbose_name = 'Relatório Atividades'

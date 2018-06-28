@@ -152,8 +152,10 @@ class RelatorioHorasAdmin(ModelAdmin):
             return response
 
         lista = []
-
-        horarios = RegistroDiario.objects.all()
+        if request.user.is_superuser:
+            horarios = RegistroDiario.objects.all()
+        else:
+            horarios = RegistroDiario.objects.filter(usuario=request.user).all()
         horas_totais = timedelta(hours=0, minutes=0)
         for horario in horarios:
             dado = None
@@ -190,15 +192,15 @@ class RelatorioHorasAdmin(ModelAdmin):
 
 
 @admin.register(RelatorioAtividades)
-class RelatorioHorasAdmin(ModelAdmin):
+class RelatorioAtividadesAdmin(ModelAdmin):
     change_list_template = 'admin/work_hour/templates/relatorio_atividades.html'
     # date_hierarchy = 'created'
 
-    def queryset(self, request):
-        qs = super(RelatorioAtividades, self).queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(usuario=request.user)
+    # def queryset(self, request):
+    #     qs = super(RelatorioAtividades, self).queryset(request)
+    #     if request.user.is_superuser:
+    #         return qs
+    #     return qs.filter(usuario=request.user)
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(
@@ -211,8 +213,10 @@ class RelatorioHorasAdmin(ModelAdmin):
             return response
 
         lista = []
-
-        atividades = AtividadeDiaria.objects.all()
+        if request.user.is_superuser:
+            atividades = AtividadeDiaria.objects.all()
+        else:
+            atividades = AtividadeDiaria.objects.filter(registro_diario__usuario=request.user).all()
         horas_totais = timedelta(hours=0, minutes=0)
         for atividade in atividades:
             dado = None
